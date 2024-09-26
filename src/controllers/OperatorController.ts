@@ -1,16 +1,18 @@
 import { Controller, Get } from 'routing-controllers';
 import 'reflect-metadata';
-import {db} from "../config/pgPool";
+import {pool} from "../config/pgPool";
+import {Operator} from "../models/Operator";
 
 @Controller()
 export class OperatorController {
   @Get('/operators')
-  async getAll() {
+  async getAll(): Promise<Operator[]> {
     try {
-      const result = await db.query('SELECT * FROM operator').then();
+      const result = await pool.query('SELECT * FROM operator');
+
       return result.rows;
     } catch (err) {
-      return err;
+      throw new Error(`Failed to get all operators: ${err}`);
     }
   }
 }
