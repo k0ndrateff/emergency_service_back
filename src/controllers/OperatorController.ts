@@ -1,4 +1,4 @@
-import {Controller, Get, OnUndefined, Param} from 'routing-controllers';
+import {Body, Controller, Get, OnUndefined, Param, Post} from 'routing-controllers';
 import 'reflect-metadata';
 import {pool} from "../config/pgPool";
 import {Operator} from "../models/Operator";
@@ -26,6 +26,19 @@ export class OperatorController {
     }
     catch (err) {
       throw new Error(`Failed to get operator: ${err}`);
+    }
+  }
+
+  @Post('/operators')
+  async create(@Body() operator: Operator): Promise<Operator> {
+    try {
+      const result = await pool.query('INSERT INTO operator (first_name, last_name, middle_name, is_free) VALUES ($1,' +
+        ' $2, $3, true)', [operator.first_name, operator.last_name, operator.middle_name]);
+
+      return result.rows[0];
+    }
+    catch (err) {
+      throw new Error(`Failed to create operator: ${err}`);
     }
   }
 }
