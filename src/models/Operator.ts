@@ -17,3 +17,14 @@ export class Operator {
   @IsBoolean()
   is_free: boolean;
 }
+
+export class CreateOperatorDto {
+  @IsString()
+  first_name: string;
+
+  @IsString()
+  last_name: string;
+
+  @IsString()
+  middle_name: string;
+}

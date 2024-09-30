@@ -9,6 +9,7 @@ const port = process.env.PORT || 3001;
 
 const app = createExpressServer({
   controllers: [OperatorController],
+  cors: true
 });
 
 app.listen(port, () => console.log(`Running on port ${port}`));
