@@ -1,11 +1,12 @@
-import {Body, Controller, Get, HttpCode, JsonController, OnUndefined, Param, Post} from 'routing-controllers';
+import {Body, Get, HttpCode, JsonController, OnUndefined, Param, Post} from 'routing-controllers';
 import 'reflect-metadata';
 import {pool} from "../config/pgPool";
-import {CreateOperatorDto, Operator} from "../models/Operator";
+import {Operator} from "../models/Operator/Operator";
+import {CreateOperatorDto} from "../models/Operator/CreateOperatorDto";
 
-@JsonController()
+@JsonController('/operators')
 export class OperatorController {
-  @Get('/operators')
+  @Get()
   async getAll(): Promise<Operator[]> {
     try {
       const result = await pool.query('SELECT * FROM operator');
@@ -16,7 +17,7 @@ export class OperatorController {
     }
   }
 
-  @Get('/operators/:id')
+  @Get('/:id')
   @OnUndefined(404)
   async getOne(@Param('id') id: string): Promise<Operator> {
     try {
@@ -30,11 +31,11 @@ export class OperatorController {
   }
 
   @HttpCode(201)
-  @Post('/operators')
+  @Post()
   async create(@Body() operator: CreateOperatorDto): Promise<Operator> {
     try {
-      const result = await pool.query('INSERT INTO operator (first_name, last_name, middle_name, is_free) VALUES' +
-        ' ($1,$2, $3, true) RETURNING *'
+      const result = await pool.query(
+        'INSERT INTO operator (first_name, last_name, middle_name, is_free) VALUES ($1,$2, $3, true) RETURNING *'
         , [operator.first_name, operator.last_name, operator.middle_name]);
 
       return result.rows[0];
