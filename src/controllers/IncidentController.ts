@@ -15,4 +15,15 @@ export class IncidentController {
       throw new Error(`Failed to get all incidents: ${err}`);
     }
   }
+
+  @Get("/active")
+  async getActive(): Promise<Incident[]> {
+    try {
+      const result = await pool.query('SELECT * FROM incident WHERE status = 1');
+
+      return result.rows;
+    } catch (err) {
+      throw new Error(`Failed to get active incidents: ${err}`);
+    }
+  }
 }
