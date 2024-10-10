@@ -19,11 +19,22 @@ export class IncidentController {
   @Get("/active")
   async getActive(): Promise<Incident[]> {
     try {
-      const result = await pool.query('SELECT * FROM incident WHERE status = 1');
+      const result = await pool.query('SELECT * FROM incident WHERE status = 1 ORDER BY priority');
 
       return result.rows;
     } catch (err) {
       throw new Error(`Failed to get active incidents: ${err}`);
+    }
+  }
+
+  @Get("/previous")
+  async getPrevious(): Promise<Incident[]> {
+    try {
+      const result = await pool.query('SELECT * FROM incident WHERE end_time IS NOT NULL ORDER BY end_time');
+
+      return result.rows;
+    } catch (err) {
+      throw new Error(`Failed to get previous incidents: ${err}`);
     }
   }
 }
