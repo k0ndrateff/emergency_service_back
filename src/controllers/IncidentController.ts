@@ -1,4 +1,4 @@
-import {Get, JsonController} from 'routing-controllers';
+import {Get, JsonController, OnUndefined, Param} from 'routing-controllers';
 import 'reflect-metadata';
 import {pool} from "../config/pgPool";
 import {Incident} from "../models/Incident/Incident";
@@ -35,6 +35,19 @@ export class IncidentController {
       return result.rows;
     } catch (err) {
       throw new Error(`Failed to get previous incidents: ${err}`);
+    }
+  }
+
+  @Get('/:id')
+  @OnUndefined(404)
+  async getOne(@Param('id') id: string): Promise<Incident> {
+    try {
+      const result = await pool.query('SELECT * FROM incident WHERE id = $1', [id]);
+
+      return result.rows[0];
+    }
+    catch (err) {
+      throw new Error(`Failed to get incident: ${err}`);
     }
   }
 }
