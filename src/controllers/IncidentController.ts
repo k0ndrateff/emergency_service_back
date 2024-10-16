@@ -1,4 +1,4 @@
-import {Get, JsonController, OnUndefined, Param} from 'routing-controllers';
+import {Body, Get, JsonController, OnUndefined, Param, Patch} from 'routing-controllers';
 import 'reflect-metadata';
 import {pool} from "../config/pgPool";
 import {Incident} from "../models/Incident/Incident";
@@ -48,6 +48,25 @@ export class IncidentController {
     }
     catch (err) {
       throw new Error(`Failed to get incident: ${err}`);
+    }
+  }
+
+  @Patch('/:id')
+  async update(@Param('id') id: string, @Body() incident: Partial<Incident>): Promise<void> {
+    try {
+      const keys = Object.keys(incident);
+      const values = Object.values(incident);
+
+      const setClause = keys.map((key, index) => `${key} = $${index + 1}`).join(', ');
+
+      const query = `UPDATE incident SET ${setClause} WHERE id = $${keys.length + 1}`;
+
+      values.push(id);
+
+      await pool.query(query, values);
+    }
+    catch (err) {
+      throw new Error(`Failed to update incident: ${err}`);
     }
   }
 }
