@@ -1,4 +1,4 @@
-import {Body, Get, JsonController, OnUndefined, Param, Patch} from 'routing-controllers';
+import {Body, Get, JsonController, OnNull, OnUndefined, Param, Patch} from 'routing-controllers';
 import 'reflect-metadata';
 import {pool} from "../config/pgPool";
 import {Incident} from "../models/Incident/Incident";
@@ -52,16 +52,20 @@ export class IncidentController {
   }
 
   @Patch('/:id')
-  async update(@Param('id') id: string, @Body() incident: Partial<Incident>): Promise<void> {
+  @OnNull(400)
+  @OnUndefined(200)
+  async update(@Param('id') id: string, @Body() incident: Partial<Incident>): Promise<void | null> {
     try {
       const keys = Object.keys(incident);
       const values = Object.values(incident);
+
+      if (!keys.length || !values.length) return null;
 
       const setClause = keys.map((key, index) => `${key} = $${index + 1}`).join(', ');
 
       const query = `UPDATE incident SET ${setClause} WHERE id = $${keys.length + 1}`;
 
-      values.push(id);
+      values.push(Number(id));
 
       await pool.query(query, values);
     }
