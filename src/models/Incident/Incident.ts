@@ -1,7 +1,7 @@
 export class Incident {
   id: number;
-  start_time: number;
-  end_time: number;
+  start_time: string;
+  end_time: string;
   status: number;
   description: string;
   danger_class: number;
