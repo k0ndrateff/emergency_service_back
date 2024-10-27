@@ -1,4 +1,4 @@
-import {Body, Get, JsonController, OnNull, OnUndefined, Param, Patch} from 'routing-controllers';
+import {Body, Get, JsonController, OnNull, OnUndefined, Param, Patch, Post} from 'routing-controllers';
 import 'reflect-metadata';
 import {pool} from "../config/pgPool";
 import {Incident} from "../models/Incident/Incident";
@@ -71,6 +71,26 @@ export class IncidentController {
     }
     catch (err) {
       throw new Error(`Failed to update incident: ${err}`);
+    }
+  }
+
+  @Post()
+  async createEmpty(@Body() data: {operatorId: number}): Promise<Incident> {
+    const now = Math.floor(Date.now() / 1000);
+
+    try {
+      const result = await pool.query(
+        `INSERT INTO incident (
+        start_time, end_time, status, description, danger_class, priority, id_operator, services, address
+      ) VALUES (
+        to_timestamp($1), null, 1, '', 1, 1, $2, null, ''
+      ) RETURNING *`,
+        [now, data.operatorId]
+      );
+
+      return result.rows[0];
+    } catch (err) {
+      throw new Error(`Failed to create empty incident: ${err}`);
     }
   }
 }

@@ -7,4 +7,6 @@ export class Incident {
   danger_class: number;
   priority: number;
   id_operator: number;
+  services: number[];
+  address: string;
 }
