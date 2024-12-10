@@ -1,9 +1,14 @@
 import axios from "axios";
+import * as process from "node:process";
+import {Geolocation} from "../models/Geolocation";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 class DadataApi {
-  private token: string = "36c47f1b48ba4024e1981e9c1d1303163a2a99c5";
+  private token = process.env.DADATA_TOKEN as string;
 
-  geoCode = async (address: string): Promise<{ lat: number; lon: number; } | undefined> => {
+  geoCode = async (address: string): Promise<Geolocation | undefined> => {
     try {
       const response = await axios.post("http://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address", JSON.stringify({ query: address }), {
         headers: {

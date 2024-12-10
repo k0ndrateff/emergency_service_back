@@ -10,8 +10,8 @@
     "server:watch": "ts-node-dev --respawn --transpile-only src/index.ts"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "k0ndrateff",
+  "license": "MIT",
   "devDependencies": {
     "@types/pg": "^8.11.10",
     "ts-node-dev": "^2.0.0",

@@ -1,8 +1,6 @@
 import {Incident} from "./Incident";
+import {Geolocation} from "../Geolocation";
 
 export class IncidentGeoCoded extends Incident {
-  address_geo?: {
-    lat: number;
-    lon: number;
-  }
+  address_geo?: Geolocation;
 }
