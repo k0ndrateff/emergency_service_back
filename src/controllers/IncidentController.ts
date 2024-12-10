@@ -2,6 +2,8 @@ import {Body, Get, JsonController, OnNull, OnUndefined, Param, Patch, Post} from
 import 'reflect-metadata';
 import {pool} from "../config/pgPool";
 import {Incident} from "../models/Incident/Incident";
+import {dadataApi} from "../external/dadataApi";
+import {IncidentGeoCoded} from "../models/Incident/IncidentGeoCoded";
 
 @JsonController('/incidents')
 export class IncidentController {
@@ -36,6 +38,19 @@ export class IncidentController {
     } catch (err) {
       throw new Error(`Failed to get previous incidents: ${err}`);
     }
+  }
+
+  @Get('/active/geo')
+  async getActiveGeoCoded(): Promise<IncidentGeoCoded[]> {
+    const incidents = await this.getActive();
+
+    const incidentsWithAddress = incidents.filter(i => i.address);
+
+    for (const incident of incidentsWithAddress) {
+      (incident as IncidentGeoCoded).address_geo = await dadataApi.geoCode(incident.address);
+    }
+
+    return incidentsWithAddress;
   }
 
   @Get('/:id')
