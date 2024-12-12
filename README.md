@@ -1,5 +1,5 @@
 # Панель оператора системы-112 | Бэкенд
-Emergency Service Dashboard | Backend ([EN](./README_en.md))
+Emergency Service Dashboard | Backend ([EN](./README_EN.md))
 
 ---
 
