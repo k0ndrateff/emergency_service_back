@@ -1,7 +1,10 @@
+import {CrewType} from "./CrewType";
+import {CrewStatus} from "./CrewStatus";
+
 export class Crew {
   id: number;
-  type: number;
-  status: number;
+  type: CrewType;
+  status: CrewStatus;
   size: number;
   officer_phone: string;
   base_address: string;

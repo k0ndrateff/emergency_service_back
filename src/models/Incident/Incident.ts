@@ -1,8 +1,10 @@
+import {IncidentStatus} from "./IncidentStatus";
+
 export class Incident {
   id: number;
   start_time: string;
   end_time: string;
-  status: number;
+  status: IncidentStatus;
   description: string;
   danger_class: number;
   priority: number;
