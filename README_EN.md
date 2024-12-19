@@ -63,3 +63,8 @@ Feedback and suggestions are welcome in the `Issues` section!
 ## Links and References
 
 - Some ideas for designing this system were inspired by the existing 112 System: [Wikipedia](https://en.wikipedia.org/wiki/112_(emergency_telephone_number))
+
+## Dura lex sed lex
+
+The project was created for educational purposes only and is not intended for real use. All data is fictitious and has
+no relation to reality.
